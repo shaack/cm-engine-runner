@@ -1,0 +1,28 @@
+{
+  "name": "cm-chess-engine-adapter",
+  "description": "## Adapted Engines",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shaack/cm-chess-engine-adapter.git"
+  },
+  "keywords": [
+    "chess",
+    "engine",
+    "chessmail",
+    "es6"
+  ],
+  "author": "shaack.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shaack/cm-chess-engine-adapter/issues"
+  },
+  "homepage": "https://github.com/shaack/cm-chess-engine-adapter#readme",
+  "devDependencies": {
+    "teevi": "^2.1.10"
+  }
+}
