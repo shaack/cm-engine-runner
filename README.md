@@ -2,8 +2,8 @@
 
 ## Adapted Engines
 
-- https://github.com/bjedrzejewski/stockfish-js, 
-  - File: stockfish-bjedrzejewski-v5.js
+- https://github.com/bjedrzejewski/stockfish-js
+  - File: stockfish-bjedrzejewski.js
   - Type: WebWorker
   - Stockfish version: 5 
   - Old, but supports Opening Books

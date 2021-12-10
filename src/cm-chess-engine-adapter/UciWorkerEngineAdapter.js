@@ -4,6 +4,6 @@
  * License: MIT, see file 'LICENSE'
  */
 
-export class UciWorkerEngineAdapter extends EngineAdapter {
+export class UciWorkerEngineAdapter extends EngineRunner {
 
 }
