@@ -14,9 +14,9 @@ const LEVEL_DEPTH = {
     5: 4,
     6: 5,
     7: 7,
-    8: 10,
-    9: 14,
-    10: 18
+    8: 12,
+    9: 18,
+    10: 22
 }
 
 export class StockfishRunner extends EngineRunner {
@@ -95,9 +95,6 @@ export class StockfishRunner extends EngineRunner {
     calculateMove(fen, level) {
         return new Promise ((resolve) => {
             this.engineState = ENGINE_STATE.THINKING
-            // this.moveResponse = moveResponse
-            const timeout = 1000    // https://www.reddit.com/r/ProgrammerHumor/comments/6xwely/from_the_apple_chess_engine_code/
-                                    // https://opensource.apple.com/source/Chess/Chess-347/Sources/MBCEngine.mm.auto.html
             setTimeout(() => {
                 this.uciCmd('position fen ' + fen)
                 this.uciCmd('go depth ' + (LEVEL_DEPTH[level]))

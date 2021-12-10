@@ -17,7 +17,7 @@
         console.log(await polyglotRunner.calculateMove(startingPosition))
 
         const stockfishRunner = new StockfishRunner({workerUrl: "./node_modules/stockfish/src/stockfish.js", responseDelay: 0})
-        console.log(await stockfishRunner.calculateMove(startingPosition, 2))
+        console.log(await stockfishRunner.calculateMove(startingPosition, 10))
     </script>
 </body>
 </html>
