@@ -1,6 +1,6 @@
 {
-  "name": "cm-chess-engine-adapter",
-  "description": "## Adapted Engines",
+  "name": "cm-chess-engine-runner",
+  "description": "abstraction layer to run chess engines, supports opening books",
   "version": "1.0.3",
   "main": "index.js",
   "scripts": {
@@ -27,7 +27,7 @@
     "teevi": "^2.1.10"
   },
   "dependencies": {
-    "cm-polyglot": "^1.0.4",
+    "cm-polyglot": "^1.0.5",
     "modrator": "^1.2.1",
     "stockfish": "^11.0.0"
   }

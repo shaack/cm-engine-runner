@@ -36,13 +36,15 @@ export class PolyglotRunner extends EngineRunner {
                     propabilityMatrix.push(move)
                 }
             }
+            // propability weighted random
+            // console.log(propabilityMatrix)
             const luckyIndex = Math.floor(Math.random() * propabilityMatrix.length)
             resolve(propabilityMatrix[luckyIndex])
         })
         return new Promise((resolve) => {
-            Promise.all([timeoutPromise, calculationPromise]).then((values) => {
+            Promise.all([this.initialization, timeoutPromise, calculationPromise]).then((values) => {
                 this.engineState = ENGINE_STATE.READY
-                resolve(values[1])
+                resolve(values[2])
             })
         })
     }
