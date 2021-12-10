@@ -93,8 +93,15 @@ export class StockfishRunner extends EngineRunner {
     }
 
     calculateMove(fen, level) {
-        return new Promise ((resolve) => {
-            this.engineState = ENGINE_STATE.THINKING
+
+        this.engineState = ENGINE_STATE.THINKING
+        const timeoutPromise = new Promise((resolve) => {
+            setTimeout(async () => {
+                resolve()
+            }, this.props.responseDelay)
+        })
+
+        const calculationPromise = new Promise ((resolve) => {
             setTimeout(() => {
                 this.uciCmd('position fen ' + fen)
                 this.uciCmd('go depth ' + (LEVEL_DEPTH[level]))
@@ -102,6 +109,13 @@ export class StockfishRunner extends EngineRunner {
                     resolve(move)
                 }
             }, this.props.responseDelay)
+        })
+
+        return new Promise((resolve) => {
+            Promise.all([timeoutPromise, calculationPromise]).then((values) => {
+                this.engineState = ENGINE_STATE.READY
+                resolve(values[1])
+            })
         })
     }
 

@@ -16,8 +16,8 @@
         const startingPosition = "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1"
         console.log(await polyglotRunner.calculateMove(startingPosition))
 
-        const stockfishRunner = new StockfishRunner({workerUrl: "./lib/stockfish.js", responseDelay: 0})
-        console.log(await stockfishRunner.calculateMove(startingPosition, 2))
+        const stockfishRunner = new StockfishRunner({workerUrl: "./lib/stockfish.js", responseDelay: 0, debug: false})
+        console.log(await stockfishRunner.calculateMove(startingPosition, 1))
     </script>
 </body>
 </html>

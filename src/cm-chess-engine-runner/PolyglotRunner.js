@@ -6,7 +6,7 @@
 import {ENGINE_STATE, EngineRunner} from "./EngineRunner.js"
 import {Polyglot} from "../../lib/cm-polyglot/Polyglot.js"
 
-export class PolyglotRunner extends EngineRunner{
+export class PolyglotRunner extends EngineRunner {
 
     constructor(props) {
         super(props)
@@ -21,21 +21,29 @@ export class PolyglotRunner extends EngineRunner{
     }
 
     calculateMove(fen) {
-        return new Promise ((resolve) => {
-            this.engineState = ENGINE_STATE.THINKING
+        this.engineState = ENGINE_STATE.THINKING
+        const timeoutPromise = new Promise((resolve) => {
             setTimeout(async () => {
-                const moves = await this.polyglot.getMovesFromFen(fen)
-                // handle propability
-                const propabilityMatrix = []
-                for (const move of moves) {
-                    for (let i = 0; i < (move.probability * 10); i++) {
-                        propabilityMatrix.push(move)
-                    }
-                }
-                const luckyIndex = Math.floor(Math.random() * propabilityMatrix.length)
-                this.engineState = ENGINE_STATE.READY
-                resolve(propabilityMatrix[luckyIndex])
+                resolve()
             }, this.props.responseDelay)
+        })
+        const calculationPromise = new Promise(async (resolve) => {
+            const moves = await this.polyglot.getMovesFromFen(fen)
+            // handle propability
+            const propabilityMatrix = []
+            for (const move of moves) {
+                for (let i = 0; i < (move.probability * 10); i++) {
+                    propabilityMatrix.push(move)
+                }
+            }
+            const luckyIndex = Math.floor(Math.random() * propabilityMatrix.length)
+            resolve(propabilityMatrix[luckyIndex])
+        })
+        return new Promise((resolve) => {
+            Promise.all([timeoutPromise, calculationPromise]).then((values) => {
+                this.engineState = ENGINE_STATE.READY
+                resolve(values[1])
+            })
         })
     }
 
