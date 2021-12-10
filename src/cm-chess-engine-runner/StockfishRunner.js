@@ -108,46 +108,5 @@ export class StockfishRunner extends EngineRunner {
     uciCmd(cmd) {
         this.engineWorker.postMessage(cmd)
     }
-/*
-    listener(event) {
-        // console.log("listener", event)
-        const line = event.data
-        if (line === 'uciok') {
-            this.engineState = ENGINE_STATE.LOADED
-        } else if (line === 'readyok') {
-            this.engineState = ENGINE_STATE.READY
-        } else {
-            let match = line.match(/^bestmove ([a-h][1-8])([a-h][1-8])([qrbk])? ponder ([a-h][1-8])?([a-h][1-8])?/)
-            if (match) {
-                this.engineState = ENGINE_STATE.READY
-                if (match[4] !== undefined) {
-                    this.ponder = {from: match[4], to: match[5]}
-                } else {
-                    this.ponder = undefined
-                }
-                const move = {from: match[1], to: match[2], promotion: match[3]}
-                this.moveResponse(move)
-            } else {
-                match = line.match(/^info .*\bdepth (\d+) .*\bnps (\d+)/)
-                if (match) {
-                    this.engineState = ENGINE_STATE.THINKING
-                    this.search = 'Depth: ' + match[1] + ' Nps: ' + match[2]
-                }
-            }
-            match = line.match(/^info .*\bscore (\w+) (-?\d+)/)
-            if (match) {
-                const score = parseInt(match[2], 10) * (this.chessConsole.playerWhite() === this ? 1 : -1)
-                let tmpScore
-                if (match[1] === 'cp') {
-                    tmpScore = (score / 100.0).toFixed(1)
-                } else if (match[1] === 'mate') {
-                    tmpScore = '#' + Math.abs(score)
-                }
-                this.scoreHistory[this.model.plyCount] = tmpScore
-                this.score = tmpScore
-            }
-        }
-    }
-*/
 
 }
