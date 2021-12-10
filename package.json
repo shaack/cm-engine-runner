@@ -29,6 +29,6 @@
   "dependencies": {
     "cm-polyglot": "^1.0.4",
     "modrator": "^1.2.1",
-    "stockfish": "^14.1.0"
+    "stockfish": "^11.0.0"
   }
 }
