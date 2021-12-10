@@ -1,6 +1,6 @@
 /**
  * Author and copyright: Stefan Haack (https://shaack.com)
- * Repository: https://github.com/shaack/cm-chess-engine-adapter
+ * Repository: https://github.com/shaack/cm-chess-engine-runner
  * License: MIT, see file 'LICENSE'
  */
 
@@ -15,12 +15,20 @@ export class EngineRunner {
 
     constructor(props) {
         this.props = {
-            level: 1
+            engineUrl: undefined,
+            responseDelay: 1000  // https://www.reddit.com/r/ProgrammerHumor/comments/6xwely/from_the_apple_chess_engine_code/
+                                 // https://opensource.apple.com/source/Chess/Chess-347/Sources/MBCEngine.mm.auto.html
         }
         Object.assign(this.props, props)
+        this.engineState = ENGINE_STATE.LOADING
+        this.initialization = this.init()
     }
 
-    calculateMove(fen, level) {
+    init() {
+        return Promise.reject("you have to implement `init()` in the EngineRunner")
+    }
+
+    calculateMove(fen, props = {}) {
 
     }
 

@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>cm-chess-engine-runner</title>
+</head>
+<body>
+    <script type="module">
+        import {PolyglotRunner} from "./src/cm-chess-engine-runner/PolyglotRunner.js"
+
+        const polyglotRunner = new PolyglotRunner({bookUrl: "./assets/books/openings.bin", responseDelay: 0})
+        const startingPosition = "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1"
+        console.log(await polyglotRunner.calculateMove(startingPosition))
+/*
+        const stockfishRunner = new StockfishRunner({engineUrl: "./lib/stockfish.wasm", responseDelay: 0})
+        console.log(await stockfishRunner.calculateMove(startingPosition))
+*/
+    </script>
+</body>
+</html>
