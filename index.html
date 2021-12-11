@@ -8,22 +8,25 @@
     <title>cm-chess-engine-runner</title>
 </head>
 <body>
-    <p>Logs are in the developer console</p>
-    <script type="module" crossorigin="anonymous">
-        import {PolyglotRunner} from "./src/cm-chess-engine-runner/PolyglotRunner.js"
-        import {StockfishRunner} from "./src/cm-chess-engine-runner/StockfishRunner.js"
+<h1>cm-chess-engine-runner</h1>
+<p>Logs are in the developer console</p>
+<script type="module" crossorigin="anonymous">
+    import {PolyglotRunner} from "./src/cm-chess-engine-runner/PolyglotRunner.js"
+    import {StockfishRunner} from "./src/cm-chess-engine-runner/StockfishRunner.js"
 
-        const polyglotRunner = new PolyglotRunner({bookUrl: "./assets/books/openings.bin", responseDelay: 0})
-        const startingPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
-        const startingFewMoves = "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1"
-        console.log(startingPosition, await polyglotRunner.calculateMove(startingPosition))
-        console.log(startingFewMoves, await polyglotRunner.calculateMove(startingFewMoves))
+    const polyglotRunner = new PolyglotRunner({bookUrl: "./assets/books/openings.bin", responseDelay: 0})
+    const startingPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+    const startingFewMoves = "rnbqkbnr/pppppp2/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1"
+    console.log(startingPosition, await polyglotRunner.calculateMove(startingPosition))
+    console.log(startingFewMoves, await polyglotRunner.calculateMove(startingFewMoves))
 
-        const positionEndGame = "8/8/8/2k5/4K3/8/8/8"
-        console.log(positionEndGame, await polyglotRunner.calculateMove(positionEndGame))
+    const positionEndGame = "8/8/8/2k5/4K3/8/8/8"
+    console.log(positionEndGame, await polyglotRunner.calculateMove(positionEndGame))
 
-        const stockfishRunner = new StockfishRunner({workerUrl: "./lib/stockfish.js", responseDelay: 0, debug: false})
-        console.log("stockfish", await stockfishRunner.calculateMove(startingPosition, 1))
-    </script>
+    const stockfishRunner = new StockfishRunner({workerUrl: "./lib/stockfish.js", responseDelay: 0, debug: true})
+    console.log("stockfish", await stockfishRunner.calculateMove(startingFewMoves))
+    const postitionBlackWillWin = "4k3/3r4/8/8/8/8/6K1/8 w - - 0 1"
+    console.log("stockfish",  await stockfishRunner.calculateMove(postitionBlackWillWin))
+</script>
 </body>
 </html>

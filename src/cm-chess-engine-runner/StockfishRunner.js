@@ -58,27 +58,7 @@ export class StockfishRunner extends EngineRunner {
         } else if (line === 'readyok') {
             this.engineState = ENGINE_STATE.READY
         } else {
-            let match = line.match(/^bestmove ([a-h][1-8])([a-h][1-8])([qrbk])?/)
-            // let match = line.match(/^bestmove ([a-h][1-8])([a-h][1-8])([qrbk])? ponder ([a-h][1-8])?([a-h][1-8])?/)
-            if (match) {
-                this.engineState = ENGINE_STATE.READY
-                /*
-                if (match[4] !== undefined) {
-                    this.ponder = {from: match[4], to: match[5]}
-                } else {
-                    this.ponder = undefined
-                }
-                */
-                const move = {from: match[1], to: match[2], promotion: match[3]}
-                this.moveResponse(move)
-            } else {
-                match = line.match(/^info .*\bdepth (\d+) .*\bnps (\d+)/)
-                if (match) {
-                    this.engineState = ENGINE_STATE.THINKING
-                    this.search = 'Depth: ' + match[1] + ' Nps: ' + match[2]
-                }
-            }
-            match = line.match(/^info .*\bscore (\w+) (-?\d+)/)
+            let match = line.match(/^info .*\bscore (\w+) (-?\d+)/)
             if (match) {
                 const score = parseInt(match[2], 10)
                 let tmpScore
@@ -89,10 +69,28 @@ export class StockfishRunner extends EngineRunner {
                 }
                 this.score = tmpScore
             }
+            // match = line.match(/^bestmove ([a-h][1-8])([a-h][1-8])([qrbk])?/)
+            match = line.match(/^bestmove ([a-h][1-8])([a-h][1-8])([qrbk])? ponder ([a-h][1-8])?([a-h][1-8])?/)
+            if (match) {
+                this.engineState = ENGINE_STATE.READY
+                if (match[4] !== undefined) {
+                    this.ponder = {from: match[4], to: match[5]}
+                } else {
+                    this.ponder = undefined
+                }
+                const move = {from: match[1], to: match[2], promotion: match[3], score: this.score, ponder: this.ponder}
+                this.moveResponse(move)
+            } else {
+                match = line.match(/^info .*\bdepth (\d+) .*\bnps (\d+)/)
+                if (match) {
+                    this.engineState = ENGINE_STATE.THINKING
+                    this.search = 'Depth: ' + match[1] + ' Nps: ' + match[2]
+                }
+            }
         }
     }
 
-    calculateMove(fen, level) {
+    calculateMove(fen, props = { level: 4 }) {
         this.engineState = ENGINE_STATE.THINKING
         const timeoutPromise = new Promise((resolve) => {
             setTimeout(async () => {
@@ -102,7 +100,7 @@ export class StockfishRunner extends EngineRunner {
         const calculationPromise = new Promise ((resolve) => {
             setTimeout(() => {
                 this.uciCmd('position fen ' + fen)
-                this.uciCmd('go depth ' + (LEVEL_DEPTH[level]))
+                this.uciCmd('go depth ' + (LEVEL_DEPTH[props.level]))
                 this.moveResponse = (move) => {
                     resolve(move)
                 }

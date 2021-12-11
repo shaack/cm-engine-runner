@@ -27,7 +27,7 @@
     "teevi": "^2.1.10"
   },
   "dependencies": {
-    "cm-polyglot": "^1.0.5",
+    "cm-polyglot": "^1.0.6",
     "modrator": "^1.2.1",
     "stockfish": "^11.0.0"
   }

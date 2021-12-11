@@ -20,7 +20,7 @@ export class PolyglotRunner extends EngineRunner {
         })
     }
 
-    calculateMove(fen) {
+    calculateMove(fen, props = {}) {
         this.engineState = ENGINE_STATE.THINKING
         const timeoutPromise = new Promise((resolve) => {
             setTimeout(async () => {
