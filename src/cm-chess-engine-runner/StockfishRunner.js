@@ -7,15 +7,15 @@
 import {ENGINE_STATE, EngineRunner} from "./EngineRunner.js"
 
 const LEVEL_DEPTH = {
-    1: 0,
-    2: 1,
-    3: 2,
-    4: 3,
-    5: 4,
-    6: 5,
-    7: 7,
-    8: 12,
-    9: 18,
+    1: 1,
+    2: 2,
+    3: 3,
+    4: 4,
+    5: 7,
+    6: 10,
+    7: 13,
+    8: 16,
+    9: 19,
     10: 22
 }
 
