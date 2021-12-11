@@ -15,6 +15,7 @@ export class EngineRunner {
 
     constructor(props) {
         this.props = {
+            debug: false,
             responseDelay: 1000  // https://www.reddit.com/r/ProgrammerHumor/comments/6xwely/from_the_apple_chess_engine_code/
                                  // https://opensource.apple.com/source/Chess/Chess-347/Sources/MBCEngine.mm.auto.html
         }

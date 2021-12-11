@@ -69,12 +69,12 @@ export class StockfishRunner extends EngineRunner {
                 }
                 this.score = tmpScore
             }
-            // match = line.match(/^bestmove ([a-h][1-8])([a-h][1-8])([qrbk])?/)
-            match = line.match(/^bestmove ([a-h][1-8])([a-h][1-8])([qrbk])? ponder ([a-h][1-8])?([a-h][1-8])?/)
+            // match = line.match(/^bestmove ([a-h][1-8])([a-h][1-8])([qrbk])?/) // ponder is not always included
+            match = line.match(/^bestmove ([a-h][1-8])([a-h][1-8])([qrbk])?( ponder ([a-h][1-8])?([a-h][1-8])?)?/)
             if (match) {
                 this.engineState = ENGINE_STATE.READY
                 if (match[4] !== undefined) {
-                    this.ponder = {from: match[4], to: match[5]}
+                    this.ponder = {from: match[5], to: match[6]}
                 } else {
                     this.ponder = undefined
                 }
@@ -115,6 +115,9 @@ export class StockfishRunner extends EngineRunner {
     }
 
     uciCmd(cmd) {
+        if(this.props.debug) {
+            console.log("  uci ->", cmd)
+        }
         this.engineWorker.postMessage(cmd)
     }
 
