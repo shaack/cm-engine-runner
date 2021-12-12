@@ -39,7 +39,6 @@ export class StockfishRunner extends EngineRunner {
 
             this.uciCmd('uci')
             this.uciCmd('ucinewgame')
-            // this.uciCmd('setoption name Minimum Thinking Time value 5000') // don't work
             this.uciCmd('isready')
             resolve()
         })
