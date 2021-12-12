@@ -14,20 +14,23 @@
     import {PolyglotRunner} from "./src/cm-chess-engine-runner/PolyglotRunner.js"
     import {StockfishRunner} from "./src/cm-chess-engine-runner/StockfishRunner.js"
 
-    const polyglotRunner = new PolyglotRunner({bookUrl: "./assets/books/openings.bin", responseDelay: 0})
+    const polyglotRunner = new PolyglotRunner({bookUrl: "./assets/books/openings.bin", responseDelay: 0, debug: true})
     const startingPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
     const startingFewMoves = "rnbqkbnr/pppppp2/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1"
-    console.log(startingPosition, await polyglotRunner.calculateMove(startingPosition))
-    console.log(startingFewMoves, await polyglotRunner.calculateMove(startingFewMoves))
+    console.log("polyglot", startingPosition, await polyglotRunner.calculateMove(startingPosition))
+    console.log("polyglot", startingFewMoves, await polyglotRunner.calculateMove(startingFewMoves))
 
     const positionEndGame = "8/8/8/2k5/4K3/8/8/8"
-    console.log(positionEndGame, await polyglotRunner.calculateMove(positionEndGame))
+    console.log("polyglot", positionEndGame, await polyglotRunner.calculateMove(positionEndGame))
 
-    const stockfishRunner = new StockfishRunner({workerUrl: "./lib/stockfish.js", responseDelay: 0, debug: false})
+    const stockfishRunner = new StockfishRunner({workerUrl: "./engines/stockfish-v10-niklasf.js", responseDelay: 0, debug: true})
     console.log("stockfish", await stockfishRunner.calculateMove(startingFewMoves))
     const postitionBlackWillWin = "4k3/3r4/8/8/8/8/6K1/8 w - - 0 1"
     console.log("stockfish",  await stockfishRunner.calculateMove(postitionBlackWillWin, {level: 1}))
     console.log("stockfish",  await stockfishRunner.calculateMove(postitionBlackWillWin, {level: 10}))
+
+    const positionManyPawns = "ppppkppp/pppppppp/pppppppp/pppppppp/8/5N2/8/RNBQKB1R b KQ - 0 1"
+    console.log("stockfish",  await stockfishRunner.calculateMove(positionManyPawns, {level: 3}))
 </script>
 </body>
 </html>

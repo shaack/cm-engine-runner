@@ -29,6 +29,9 @@ export class PolyglotRunner extends EngineRunner {
         })
         const calculationPromise = new Promise(async (resolve) => {
             const moves = await this.polyglot.getMovesFromFen(fen)
+            if(this.props.debug) {
+                console.log(fen, "moves found in opening book", moves)
+            }
             // handle propability
             const propabilityMatrix = []
             for (const move of moves) {
@@ -37,7 +40,6 @@ export class PolyglotRunner extends EngineRunner {
                 }
             }
             // propability weighted random
-            // console.log(propabilityMatrix)
             const luckyIndex = Math.floor(Math.random() * propabilityMatrix.length)
             resolve(propabilityMatrix[luckyIndex])
         })
