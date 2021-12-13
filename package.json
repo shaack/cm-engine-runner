@@ -1,5 +1,5 @@
 {
-  "name": "cm-chess-engine-runner",
+  "name": "cm-engine-runner",
   "description": "abstraction layer to run chess engines, supports opening books",
   "version": "1.0.11",
   "main": "index.js",

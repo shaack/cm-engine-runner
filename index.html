@@ -5,14 +5,14 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>cm-chess-engine-runner</title>
+    <title>cm-engine-runner</title>
 </head>
 <body>
-<h1>cm-chess-engine-runner</h1>
+<h1>cm-engine-runner</h1>
 <p>Logs are in the developer console</p>
 <script type="module" crossorigin="anonymous">
-    import {PolyglotRunner} from "./src/cm-chess-engine-runner/PolyglotRunner.js"
-    import {StockfishRunner} from "./src/cm-chess-engine-runner/StockfishRunner.js"
+    import {PolyglotRunner} from "./src/cm-engine-runner/PolyglotRunner.js"
+    import {StockfishRunner} from "./src/cm-engine-runner/StockfishRunner.js"
 
     const polyglotRunner = new PolyglotRunner({bookUrl: "./assets/books/openings.bin", responseDelay: 0, debug: true})
     const startingPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"

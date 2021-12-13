@@ -1,6 +1,6 @@
 /**
  * Author and copyright: Stefan Haack (https://shaack.com)
- * Repository: https://github.com/shaack/cm-chess-engine-runner
+ * Repository: https://github.com/shaack/cm-engine-runner
  * License: MIT, see file 'LICENSE'
  */
 
