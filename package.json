@@ -1,7 +1,7 @@
 {
   "name": "cm-engine-runner",
   "description": "abstraction layer to run chess engines, supports opening books",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
