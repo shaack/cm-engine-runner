@@ -10,13 +10,13 @@ const LEVEL_DEPTH = {
     1: 1,
     2: 2,
     3: 3,
-    4: 4,
+    4: 5,
     5: 7,
-    6: 10,
-    7: 13,
-    8: 16,
-    9: 19,
-    10: 22
+    6: 9,
+    7: 12,
+    8: 15,
+    9: 17,
+    10: 18
 }
 
 export class StockfishRunner extends EngineRunner {
