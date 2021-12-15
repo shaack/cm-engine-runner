@@ -7,16 +7,16 @@
 import {ENGINE_STATE, EngineRunner} from "./EngineRunner.js"
 
 const LEVEL_DEPTH = {
-    1: 1,
-    2: 2,
-    3: 3,
-    4: 5,
-    5: 7,
-    6: 9,
-    7: 12,
-    8: 15,
-    9: 17,
-    10: 18
+    1: 0,
+    2: 1,
+    3: 2,
+    4: 3,
+    5: 4,
+    6: 5,
+    7: 7,
+    8: 11,
+    9: 14,
+    10: 17
 }
 
 export class StockfishRunner extends EngineRunner {
