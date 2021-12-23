@@ -32,7 +32,7 @@ export class PolyglotRunner extends EngineRunner {
             if(this.props.debug) {
                 console.log(fen, "moves found in opening book", moves)
             }
-            // handle propability
+            // handle probability
             const propabilityMatrix = []
             for (const move of moves) {
                 for (let i = 0; i < (move.probability * 10); i++) {
