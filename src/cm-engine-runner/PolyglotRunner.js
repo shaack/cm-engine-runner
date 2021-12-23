@@ -39,7 +39,7 @@ export class PolyglotRunner extends EngineRunner {
                     propabilityMatrix.push(move)
                 }
             }
-            // propability weighted random
+            // probability weighted random
             const luckyIndex = Math.floor(Math.random() * propabilityMatrix.length)
             resolve(propabilityMatrix[luckyIndex])
         })
