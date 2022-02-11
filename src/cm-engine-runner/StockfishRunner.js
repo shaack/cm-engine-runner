@@ -1,22 +1,22 @@
 /**
  * Author and copyright: Stefan Haack (https://shaack.com)
- * Repository: https://github.com/shaack/cm-engine-runner
+ * Repository: https://github.com/shaack/cm-chess-engine-runner
  * License: MIT, see file 'LICENSE'
  */
 
 import {ENGINE_STATE, EngineRunner} from "./EngineRunner.js"
 
 const LEVEL_DEPTH = {
-    1: 0,
-    2: 1,
-    3: 2,
-    4: 3,
-    5: 4,
-    6: 5,
-    7: 7,
-    8: 10,
-    9: 13,
-    10: 16
+    1: 1,
+    2: 2,
+    3: 3,
+    4: 4,
+    5: 5,
+    6: 7,
+    7: 9,
+    8: 12,
+    9: 15,
+    10: 18
 }
 
 export class StockfishRunner extends EngineRunner {
