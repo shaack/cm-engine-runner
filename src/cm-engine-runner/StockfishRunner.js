@@ -1,22 +1,33 @@
 /**
  * Author and copyright: Stefan Haack (https://shaack.com)
- * Repository: https://github.com/shaack/cm-engine-runner
+ * Repository: https://github.com/shaack/cm-chess-engine-runner
  * License: MIT, see file 'LICENSE'
  */
 
 import {ENGINE_STATE, EngineRunner} from "./EngineRunner.js"
 
-const LEVEL_DEPTH = {
-    1: 0,
-    2: 1,
-    3: 2,
-    4: 3,
-    5: 4,
-    6: 5,
-    7: 7,
-    8: 10,
-    9: 13,
-    10: 16
+// [depth, Skill Level]
+export const LEVELS = {
+    1: [3, 0],
+    2: [3, 1],
+    3: [4, 2],
+    4: [5, 3],
+    5: [5, 4],
+    6: [6, 5],
+    7: [7, 6],
+    8: [8, 7],
+    9: [9, 8],
+    10: [10, 10],
+    11: [11, 11],
+    12: [12, 12],
+    13: [13, 13],
+    14: [14, 14],
+    15: [15, 15],
+    16: [16, 16],
+    17: [17, 17],
+    18: [18, 18],
+    19: [19, 19],
+    20: [20, 20]
 }
 
 export class StockfishRunner extends EngineRunner {
@@ -99,8 +110,9 @@ export class StockfishRunner extends EngineRunner {
         })
         const calculationPromise = new Promise ((resolve) => {
             setTimeout(() => {
+                this.uciCmd('setoption name Skill Level value ' + (LEVELS[props.level][1]))
                 this.uciCmd('position fen ' + fen)
-                this.uciCmd('go depth ' + (LEVEL_DEPTH[props.level]))
+                this.uciCmd('go depth ' + (LEVELS[props.level][0]))
                 this.moveResponse = (move) => {
                     resolve(move)
                 }
