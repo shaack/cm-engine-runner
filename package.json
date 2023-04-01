@@ -29,6 +29,6 @@
   },
   "dependencies": {
     "cm-polyglot": "^1.0.7",
-    "modlib": "^1.2.11"
+    "modlib": "^1.2.12"
   }
 }
