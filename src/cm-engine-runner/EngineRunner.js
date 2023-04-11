@@ -21,7 +21,8 @@ export class EngineRunner {
         }
         Object.assign(this.props, props)
         this.engineState = ENGINE_STATE.LOADING
-        this.initialization = this.init()
+        this.initialized = this.init()
+        this.initialization = this.initialized // TODO @deprecated use initialized
     }
 
     init() {

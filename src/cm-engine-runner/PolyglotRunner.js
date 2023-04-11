@@ -44,7 +44,7 @@ export class PolyglotRunner extends EngineRunner {
             resolve(propabilityMatrix[luckyIndex])
         })
         return new Promise((resolve) => {
-            Promise.all([this.initialization, timeoutPromise, calculationPromise]).then((values) => {
+            Promise.all([this.initialized, timeoutPromise, calculationPromise]).then((values) => {
                 this.engineState = ENGINE_STATE.READY
                 resolve(values[2])
             })
