@@ -4,7 +4,7 @@
  * License: MIT, see file 'LICENSE'
  */
 import {ENGINE_STATE, EngineRunner} from "./EngineRunner.js"
-import {Polyglot} from "../../lib/cm-polyglot/Polyglot.js"
+import {Polyglot} from "cm-polyglot/src/Polyglot.js"
 
 export class PolyglotRunner extends EngineRunner {
 
