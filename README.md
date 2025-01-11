@@ -1,21 +1,30 @@
-# cm-chess-engines-runner
+# cm-engine-runner
+
+A JavaScript module to act as a framework for running chess engines in the browser.
 
 ## Working engines
 
+### Stockfish 10
+
+- File: `engines/stockfish-v10-niklasf.js`
+- Type: WebWorker
+- Stockfish version: 10
+- Latest Version with WebWorker
 - https://github.com/niklasf/stockfish.js
-  - File: [engines/stockfish-v10-niklasf.js]()
-  - Type: WebWorker
-  - Stockfish version: 10
-  - Latest Version with WebWorker
 
+### Polyglot opening books
+
+- An engine to play moves from a polyglot (.bin) openings file.
 - https://github.com/shaack/cm-polyglot
-  - An engine to play moves from a polyglot (.bin) openings file.
 
-### Not implemented yet, does not work in Safari as of 2021-12-12
+### Stockfish 14
+
+Not implemented yet, does not work in Safari as of 2021-12-12
+
+- Type: WASM
+- Stockfish version: 14
+- Latest js version, multithreaded
 - https://github.com/nmrugg/stockfish.js
-  - Type: WASM
-  - Stockfish version: 14
-  - Latest js version, Multithreadded
 
 ## Stockfish Skill Levels
 
@@ -43,3 +52,7 @@ And depth to ELO: https://chess.stackexchange.com/questions/8123/stockfish-elo-v
 - https://www.chessprogramming.org/Opening_Book#Formats 
 - https://github.com/evilwan/stakelbase
 
+---
+
+Find more high quality JavaScript modules from [shaack.com](https://shaack.com)
+on [our projects page](https://shaack.com/works).
