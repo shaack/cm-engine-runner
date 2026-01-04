@@ -103,6 +103,7 @@ export class StockfishRunner extends EngineRunner {
 
     calculateMove(fen, props = { level: 4 }) {
         this.engineState = ENGINE_STATE.THINKING
+        this.score = undefined // Reset score to avoid carrying over stale values
         const timeoutPromise = new Promise((resolve) => {
             setTimeout(async () => {
                 resolve()
