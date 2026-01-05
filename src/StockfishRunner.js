@@ -80,8 +80,8 @@ export class StockfishRunner extends EngineRunner {
                 }
                 this.score = tmpScore
             }
-            // match = line.match(/^bestmove ([a-h][1-8])([a-h][1-8])([qrbk])?/) // ponder is not always included
-            match = line.match(/^bestmove ([a-h][1-8])([a-h][1-8])([qrbk])?( ponder ([a-h][1-8])?([a-h][1-8])?)?/)
+            // match = line.match(/^bestmove ([a-h][1-8])([a-h][1-8])([qrbn])?/) // ponder is not always included
+            match = line.match(/^bestmove ([a-h][1-8])([a-h][1-8])([qrbn])?( ponder ([a-h][1-8])?([a-h][1-8])?)?/)
             if (match) {
                 this.engineState = ENGINE_STATE.READY
                 if (match[4] !== undefined) {
