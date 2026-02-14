@@ -22,10 +22,6 @@ export class EngineRunner {
         Object.assign(this.props, props)
         this.engineState = ENGINE_STATE.LOADING
         this.initialized = this.init()
-        /**
-         * @deprecated 2023-04-11 use `this.initialized` instead
-         */
-        this.initialization = this.initialized
     }
 
     init() {

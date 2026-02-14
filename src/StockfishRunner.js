@@ -37,9 +37,12 @@ export class StockfishRunner extends EngineRunner {
     }
 
     init() {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             const listener = (event) => {
                 this.workerListener(event)
+                if (this.engineState === ENGINE_STATE.READY) {
+                    resolve()
+                }
             }
             if (this.engineWorker) {
                 this.engineWorker.removeEventListener("message", listener)
@@ -47,11 +50,13 @@ export class StockfishRunner extends EngineRunner {
             }
             this.engineWorker = new Worker(this.props.workerUrl)
             this.engineWorker.addEventListener("message", listener)
+            this.engineWorker.addEventListener("error", () => {
+                reject(new Error("Engine worker failed to load from: " + this.props.workerUrl))
+            })
 
             this.uciCmd('uci')
             this.uciCmd('ucinewgame')
             this.uciCmd('isready')
-            resolve()
         })
     }
 

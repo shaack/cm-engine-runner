@@ -4,27 +4,17 @@ A JavaScript module to act as a framework for running chess engines in the brows
 
 ## Working engines
 
-### Stockfish 10
+### Stockfish 18
 
-- File: `engines/stockfish-v10-niklasf.js`
-- Type: WebWorker
-- Stockfish version: 10
-- Latest Version with WebWorker
-- https://github.com/niklasf/stockfish.js
+- npm package: `stockfish` (v18.0.5)
+- File: `node_modules/stockfish/bin/stockfish-18-lite-single.js`
+- Type: WASM (single-threaded lite variant)
+- https://github.com/nmrugg/stockfish.js
 
 ### Polyglot opening books
 
 - An engine to play moves from a polyglot (.bin) openings file.
 - https://github.com/shaack/cm-polyglot
-
-### Stockfish 14
-
-Not implemented yet, does not work in Safari as of 2021-12-12
-
-- Type: WASM
-- Stockfish version: 14
-- Latest js version, multithreaded
-- https://github.com/nmrugg/stockfish.js
 
 ## Stockfish Skill Levels
 
