@@ -16,6 +16,20 @@ A JavaScript module to act as a framework for running chess engines in the brows
 - An engine to play moves from a polyglot (.bin) openings file.
 - https://github.com/shaack/cm-polyglot
 
+## StockfishRunner API notes
+
+`calculateMove(fen, props)` accepts:
+
+- `level` 1-20, maps to search depth and Skill Level (see LEVELS)
+- `chess960` set true for Chess960 positions; the runner sets the engine
+  option `UCI_Chess960` accordingly (required for correct castling rules,
+  the option is only re-sent when the value changes)
+
+The returned promise resolves with the move, or with `null` when the engine
+reports `bestmove (none)` (mate/stalemate position) or stays silent longer
+than the runner prop `calculationTimeout` (default 120000 ms, set 0 to
+disable). Callers must handle a `null` result.
+
 ## Stockfish Skill Levels
 
     this.uciCmd('setoption name Skill Level value ' + (LEVELS[props.level][1]))

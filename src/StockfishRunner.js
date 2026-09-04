@@ -34,6 +34,15 @@ export class StockfishRunner extends EngineRunner {
 
     constructor(props) {
         super(props)
+        if (this.props.calculationTimeout === undefined) {
+            // safety net: if the engine never answers with a "bestmove" line
+            // (silently rejected position, crashed worker), calculateMove()
+            // resolves with null after this many ms instead of hanging forever.
+            // Generous default, deep searches on slow devices are legitimate.
+            this.props.calculationTimeout = 120000
+        }
+        // UCI_Chess960 state actually sent to the engine (engine default is false)
+        this.chess960Sent = false
     }
 
     init() {
@@ -85,6 +94,19 @@ export class StockfishRunner extends EngineRunner {
                 }
                 this.score = tmpScore
             }
+            if (line.startsWith("bestmove (none)")) {
+                // no legal move in this position (checkmate/stalemate or a
+                // position the engine rejected): resolve with null instead of
+                // waiting forever for a move that will never come
+                this.engineState = ENGINE_STATE.READY
+                this.ponder = undefined
+                if (this.moveResponse) {
+                    const respond = this.moveResponse
+                    this.moveResponse = undefined
+                    respond(null)
+                }
+                return
+            }
             // match = line.match(/^bestmove ([a-h][1-8])([a-h][1-8])([qrbn])?/) // ponder is not always included
             match = line.match(/^bestmove ([a-h][1-8])([a-h][1-8])([qrbn])?( ponder ([a-h][1-8])?([a-h][1-8])?)?/)
             if (match) {
@@ -95,7 +117,13 @@ export class StockfishRunner extends EngineRunner {
                     this.ponder = undefined
                 }
                 const move = {from: match[1], to: match[2], promotion: match[3], score: this.score, ponder: this.ponder}
-                this.moveResponse(move)
+                if (this.moveResponse) {
+                    // can be undefined when a timed-out search was stopped and
+                    // its late bestmove arrives after calculateMove resolved
+                    const respond = this.moveResponse
+                    this.moveResponse = undefined
+                    respond(move)
+                }
             } else {
                 match = line.match(/^info .*\bdepth (\d+) .*\bnps (\d+)/)
                 if (match) {
@@ -106,6 +134,15 @@ export class StockfishRunner extends EngineRunner {
         }
     }
 
+    /**
+     * @param fen the position to search
+     * @param props `level` 1-20 (maps to depth and Skill Level, see LEVELS),
+     *              `chess960` true for Chess960 positions (sets the engine
+     *              option UCI_Chess960, required for correct castling)
+     * @returns Promise, resolves with the move or with null, if the engine
+     *          found no move (mate/stalemate position, "bestmove (none)") or
+     *          did not answer within props.calculationTimeout
+     */
     calculateMove(fen, props = { level: 4 }) {
         this.engineState = ENGINE_STATE.THINKING
         this.score = undefined // Reset score to avoid carrying over stale values
@@ -116,6 +153,11 @@ export class StockfishRunner extends EngineRunner {
         })
         const calculationPromise = new Promise ((resolve) => {
             setTimeout(() => {
+                const chess960 = !!props.chess960
+                if (chess960 !== this.chess960Sent) {
+                    this.uciCmd('setoption name UCI_Chess960 value ' + chess960)
+                    this.chess960Sent = chess960
+                }
                 this.uciCmd('setoption name Skill Level value ' + (LEVELS[props.level][1]))
                 this.uciCmd('position fen ' + fen)
                 this.uciCmd('go depth ' + (LEVELS[props.level][0]))
@@ -124,8 +166,27 @@ export class StockfishRunner extends EngineRunner {
                 }
             }, this.props.responseDelay)
         })
+        // never hang forever: if the engine stays silent, stop the search,
+        // detach the stale moveResponse and resolve with null
+        let guardedCalculation = calculationPromise
+        if (this.props.calculationTimeout) {
+            let timeoutHandle
+            guardedCalculation = Promise.race([
+                calculationPromise.then((move) => {
+                    clearTimeout(timeoutHandle)
+                    return move
+                }),
+                new Promise((resolve) => {
+                    timeoutHandle = setTimeout(() => {
+                        this.moveResponse = undefined
+                        this.uciCmd('stop')
+                        resolve(null)
+                    }, this.props.calculationTimeout)
+                })
+            ])
+        }
         return new Promise((resolve) => {
-            Promise.all([this.initialisation, timeoutPromise, calculationPromise]).then((values) => {
+            Promise.all([this.initialisation, timeoutPromise, guardedCalculation]).then((values) => {
                 this.engineState = ENGINE_STATE.READY
                 resolve(values[2])
             })
