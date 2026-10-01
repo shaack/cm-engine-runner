@@ -112,6 +112,14 @@ export class StockfishRunner extends EngineRunner {
             resolve()
         } else {
             let match = line.match(/^info .*\bscore (\w+) (-?\d+)/)
+            // With Skill Level below 20 Stockfish searches four lines (MultiPV 4)
+            // and prints them in order, the last info line before "bestmove" is
+            // the fourth best line. Only the principal variation (multipv 1, or
+            // no multipv at all) carries the score of the position.
+            const multipv = line.match(/ multipv (\d+)/)
+            if (match && multipv && multipv[1] !== "1") {
+                match = null
+            }
             if (match) {
                 const score = parseInt(match[2], 10)
                 let tmpScore
@@ -165,6 +173,9 @@ export class StockfishRunner extends EngineRunner {
     /**
      * @param fen the position to search
      * @param props `level` 1-20 (maps to depth and Skill Level, see LEVELS),
+     *              for a computer opponent of adjustable strength.
+     *              `depth` search depth with full engine strength (Skill
+     *              Level 20), for analysis; takes precedence over `level`.
      *              `chess960` true for Chess960 positions (sets the engine
      *              option UCI_Chess960, required for correct castling)
      * @returns Promise, resolves with the move or with null, if the engine
@@ -188,9 +199,21 @@ export class StockfishRunner extends EngineRunner {
                     this.uciCmd('setoption name UCI_Chess960 value ' + chess960)
                     this.chess960Sent = chess960
                 }
-                this.uciCmd('setoption name Skill Level value ' + (LEVELS[props.level][1]))
+                // Skill Level below 20 weakens the engine: MultiPV 4 (three to
+                // four times the work per depth) plus a random pick among the
+                // lines. An analysis wants the real best move, hence `depth`.
+                let depth, skillLevel
+                if (props.depth !== undefined) {
+                    depth = props.depth
+                    skillLevel = 20
+                } else {
+                    const level = LEVELS[props.level] ? props.level : 4
+                    depth = LEVELS[level][0]
+                    skillLevel = LEVELS[level][1]
+                }
+                this.uciCmd('setoption name Skill Level value ' + skillLevel)
                 this.uciCmd('position fen ' + fen)
-                this.uciCmd('go depth ' + (LEVELS[props.level][0]))
+                this.uciCmd('go depth ' + depth)
                 this.moveResponse = (move) => {
                     resolve(move)
                 }

@@ -104,7 +104,8 @@ Each runner tracks its state in `runner.engineState` with the values from `ENGIN
 
 | Prop | Default | Meaning |
 |---|---|---|
-| `level` | `4` | 1 to 20, maps to search depth and the engine option `Skill Level`, see the table below |
+| `level` | `4` | 1 to 20, maps to search depth and the engine option `Skill Level`, see the table below. For a computer opponent of adjustable strength. |
+| `depth` | none | Search depth with full engine strength (`Skill Level` 20). For analysis. Takes precedence over `level`. |
 | `chess960` | `false` | Set `true` for Chess960 positions. The runner sets the engine option `UCI_Chess960`, without it Stockfish applies the wrong castling rules. The option is only re-sent when the value changes. |
 
 The runner sends `position fen ...` followed by `go depth N` and resolves on the engine's `bestmove` line.
@@ -137,6 +138,14 @@ The value is from the point of view of the side to move in the given position, a
 | 11 to 20 | same as level | same as level |
 
 Stockfish's `Skill Level` 0 plays at roughly 1100 Elo and each step adds about 65 Elo, so level 20 is the full engine strength. How depth relates to Elo is discussed on [chess.stackexchange](https://chess.stackexchange.com/questions/8123/stockfish-elo-vs-search-depth?rq=1).
+
+A `Skill Level` below 20 does more than weaken the move choice. Stockfish then searches four lines (`MultiPV` 4) and picks among them with a random element. Four lines cost three to four times the work per depth, which is why level 19 usually takes longer than level 20. That is fine for an opponent. An analysis wants the real best move and the real score at the lowest possible cost, so it should pass `depth` instead of `level`:
+
+```javascript
+await engine.calculateMove(fen, {depth: 15}) // Skill Level 20, one line
+```
+
+When several lines are searched, the runner takes `score` only from the principal variation (`multipv 1`), not from the last `info` line the engine printed.
 
 Depth 20 is a lot for the single threaded WASM build. On a slow device a search at that depth can run into `calculationTimeout`. An analysis that runs over a whole game should offer the user a lower depth.
 
