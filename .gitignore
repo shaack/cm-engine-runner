@@ -2,4 +2,5 @@
 /lib
 /.idea
 /.claude
-/CLAUDE.md.DS_Store
+/CLAUDE.md
+.DS_Store
