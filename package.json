@@ -5,8 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo 'Open test/index.html in your browser for unit testing, or run `npm run test:headless` (needs a global puppeteer).'; exit 1",
-    "test:headless": "node test/headless.mjs"
+    "test": "teevi"
   },
   "repository": {
     "type": "git",
@@ -25,7 +24,7 @@
   },
   "homepage": "https://github.com/shaack/cm-engine-runner#readme",
   "devDependencies": {
-    "teevi": "^2.5.0"
+    "teevi": "^2.7.0"
   },
   "dependencies": {
     "cm-polyglot": "^1.1.0",
