@@ -5,7 +5,7 @@ A small ES6 module that runs chess engines in the browser behind one common inte
 - `StockfishRunner` drives a Stockfish WASM build in a Web Worker over the UCI protocol.
 - `PolyglotRunner` plays moves from a Polyglot opening book (`.bin`) via [cm-polyglot](https://github.com/shaack/cm-polyglot).
 
-Both answer the same call, `calculateMove(fen, props)`, and resolve with a move object. That makes it easy to try the opening book first and fall back to the engine, as [chess-console-stockfish](https://github.com/shaack/chess-console-stockfish) does.
+Both answer the same call, `calculateMove(fen, props)`, and resolve with a move object. The Stockfish runner serves two purposes: a computer opponent of adjustable strength (`level` 1 to 20) and a full strength analysis at a chosen search depth (`depth`). That makes it easy to try the opening book first and fall back to the engine, as [chess-console-stockfish](https://github.com/shaack/chess-console-stockfish) does.
 
 No build step, no TypeScript. The sources in `src/` run directly in the browser as ES modules. The library is used on [chessmail.de](https://www.chessmail.de) for the computer opponent and the game analysis board.
 
@@ -163,7 +163,7 @@ One runner handles one search at a time. Do not call `calculateMove` again befor
 ```javascript
 let queue = Promise.resolve()
 function analyze(fen) {
-    queue = queue.then(() => engine.calculateMove(fen, {level: 20}))
+    queue = queue.then(() => engine.calculateMove(fen, {depth: 20}))
     return queue
 }
 ```
