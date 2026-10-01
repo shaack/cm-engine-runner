@@ -30,6 +30,10 @@ reports `bestmove (none)` (mate/stalemate position) or stays silent longer
 than the runner prop `calculationTimeout` (default 120000 ms, set 0 to
 disable). Callers must handle a `null` result.
 
+After such a timeout the runner sends `stop` and waits for the engine's
+final `bestmove` line before it starts the next search, so the late answer
+is never mistaken for the result of the following position.
+
 ## Stockfish Skill Levels
 
     this.uciCmd('setoption name Skill Level value ' + (LEVELS[props.level][1]))

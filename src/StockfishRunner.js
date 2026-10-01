@@ -43,6 +43,27 @@ export class StockfishRunner extends EngineRunner {
         }
         // UCI_Chess960 state actually sent to the engine (engine default is false)
         this.chess960Sent = false
+        // Handshake after a timed-out search: the engine answers the "stop"
+        // with one more "bestmove" line. Until it has arrived, no new search is
+        // started, otherwise the engine's late answer would be taken for the
+        // result of the next position (score of the wrong side, illegal move).
+        this.stoppedSearch = null
+        this.stoppedSearchResolve = undefined
+    }
+
+    /**
+     * Resolves once the bestmove of a stopped search has arrived (or after a
+     * short grace period, should the engine never answer, e.g. crashed worker).
+     */
+    waitForStoppedSearch() {
+        if (!this.stoppedSearch) {
+            return Promise.resolve()
+        }
+        const grace = new Promise((resolve) => setTimeout(resolve, 5000))
+        return Promise.race([this.stoppedSearch, grace]).then(() => {
+            this.stoppedSearch = null
+            this.stoppedSearchResolve = undefined
+        })
     }
 
     init() {
@@ -82,6 +103,13 @@ export class StockfishRunner extends EngineRunner {
             this.engineState = ENGINE_STATE.LOADED
         } else if (line === 'readyok') {
             this.engineState = ENGINE_STATE.READY
+        } else if (line.startsWith("bestmove") && this.stoppedSearchResolve) {
+            // late answer of a search stopped after calculationTimeout: consume it
+            // and release the search waiting in calculateMove
+            this.engineState = ENGINE_STATE.READY
+            const resolve = this.stoppedSearchResolve
+            this.stoppedSearchResolve = undefined
+            resolve()
         } else {
             let match = line.match(/^info .*\bscore (\w+) (-?\d+)/)
             if (match) {
@@ -118,8 +146,8 @@ export class StockfishRunner extends EngineRunner {
                 }
                 const move = {from: match[1], to: match[2], promotion: match[3], score: this.score, ponder: this.ponder}
                 if (this.moveResponse) {
-                    // can be undefined when a timed-out search was stopped and
-                    // its late bestmove arrives after calculateMove resolved
+                    // undefined after a timed-out search (its late bestmove is
+                    // handled above) or when "stop" was sent from outside
                     const respond = this.moveResponse
                     this.moveResponse = undefined
                     respond(move)
@@ -145,14 +173,16 @@ export class StockfishRunner extends EngineRunner {
      */
     calculateMove(fen, props = { level: 4 }) {
         this.engineState = ENGINE_STATE.THINKING
-        this.score = undefined // Reset score to avoid carrying over stale values
         const timeoutPromise = new Promise((resolve) => {
             setTimeout(async () => {
                 resolve()
             }, this.props.responseDelay)
         })
         const calculationPromise = new Promise ((resolve) => {
-            setTimeout(() => {
+            setTimeout(async () => {
+                // a search stopped by calculationTimeout must have answered first
+                await this.waitForStoppedSearch()
+                this.score = undefined // Reset score to avoid carrying over stale values
                 const chess960 = !!props.chess960
                 if (chess960 !== this.chess960Sent) {
                     this.uciCmd('setoption name UCI_Chess960 value ' + chess960)
@@ -179,6 +209,9 @@ export class StockfishRunner extends EngineRunner {
                 new Promise((resolve) => {
                     timeoutHandle = setTimeout(() => {
                         this.moveResponse = undefined
+                        this.stoppedSearch = new Promise((resolveStopped) => {
+                            this.stoppedSearchResolve = resolveStopped
+                        })
                         this.uciCmd('stop')
                         resolve(null)
                     }, this.props.calculationTimeout)
