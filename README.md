@@ -193,6 +193,19 @@ Looks up the position in the book and picks one of the book moves at random, wei
 3. Implement `calculateMove(fen, props)` and resolve with `{from, to, promotion}` plus whatever extra data your engine delivers. Keep `engineState` up to date, `THINKING` while searching, `READY` afterwards.
 4. Honor `this.props.responseDelay` if the runner is meant for a computer opponent.
 
+## Running the tests
+
+The tests use [Teevi](https://github.com/shaack/teevi) and run in the browser. Serve the project over http (ES modules do not load from `file://`) and open `test/index.html`, or run them in headless Chrome:
+
+```bash
+npm install -g puppeteer   # once, puppeteer is deliberately not a dependency
+npm run test:headless
+```
+
+- `test/TestStockfishRunner.js` drives the runner with `test/FakeStockfishWorker.js`, a scripted stand-in for the engine worker. It covers UCI parsing, `level` and `depth`, the Chess960 option, `calculationTimeout` and the handshake after a stopped search, all deterministic and fast. One test waits the full five second grace period on purpose.
+- `test/TestPolyglotRunner.js` reads the example book in `assets/books/`.
+- `test/TestStockfishIntegration.js` loads the real Stockfish WASM build and runs a few shallow searches.
+
 ## Supported engine builds
 
 - `stockfish` npm package, version 18, file `bin/stockfish-18-lite-single.js`, WASM, single threaded. This is the build used in the demo and on chessmail.de. Multi threaded builds need cross origin isolation headers (`SharedArrayBuffer`), the single threaded build does not. See [stockfish.js](https://github.com/nmrugg/stockfish.js).

@@ -5,11 +5,12 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo 'Open test/index.html in your browser for unit testing, or run `npm run test:headless` (needs a global puppeteer).'; exit 1",
+    "test:headless": "node test/headless.mjs"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shaack/cm-chess-engine-adapter.git"
+    "url": "git+https://github.com/shaack/cm-engine-runner.git"
   },
   "keywords": [
     "chess",
@@ -20,11 +21,11 @@
   "author": "shaack.com",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/shaack/cm-chess-engine-adapter/issues"
+    "url": "https://github.com/shaack/cm-engine-runner/issues"
   },
-  "homepage": "https://github.com/shaack/cm-chess-engine-adapter#readme",
+  "homepage": "https://github.com/shaack/cm-engine-runner#readme",
   "devDependencies": {
-    "teevi": "^2.3.0"
+    "teevi": "^2.5.0"
   },
   "dependencies": {
     "cm-polyglot": "^1.1.0",

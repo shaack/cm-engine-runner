@@ -189,6 +189,9 @@ export class StockfishRunner extends EngineRunner {
                 resolve()
             }, this.props.responseDelay)
         })
+        // the timeout clock starts when "go" is sent, not while the runner is
+        // still waiting for the late answer of a previously stopped search
+        let onSearchStarted = () => {}
         const calculationPromise = new Promise ((resolve) => {
             setTimeout(async () => {
                 // a search stopped by calculationTimeout must have answered first
@@ -217,6 +220,7 @@ export class StockfishRunner extends EngineRunner {
                 this.moveResponse = (move) => {
                     resolve(move)
                 }
+                onSearchStarted()
             }, this.props.responseDelay)
         })
         // never hang forever: if the engine stays silent, stop the search,
@@ -230,14 +234,16 @@ export class StockfishRunner extends EngineRunner {
                     return move
                 }),
                 new Promise((resolve) => {
-                    timeoutHandle = setTimeout(() => {
-                        this.moveResponse = undefined
-                        this.stoppedSearch = new Promise((resolveStopped) => {
-                            this.stoppedSearchResolve = resolveStopped
-                        })
-                        this.uciCmd('stop')
-                        resolve(null)
-                    }, this.props.calculationTimeout)
+                    onSearchStarted = () => {
+                        timeoutHandle = setTimeout(() => {
+                            this.moveResponse = undefined
+                            this.stoppedSearch = new Promise((resolveStopped) => {
+                                this.stoppedSearchResolve = resolveStopped
+                            })
+                            this.uciCmd('stop')
+                            resolve(null)
+                        }, this.props.calculationTimeout)
+                    }
                 })
             ])
         }

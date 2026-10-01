@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test cm-engine-runner</title>
+</head>
+<body>
+<h1><a href="../">cm-engine-runner</a></h1>
+<p><i>Lightweight unit testing with <a href="https://github.com/shaack/teevi">Teevi</a></i>.</p>
+<script src="https://cdn.jsdelivr.net/npm/es-module-shims@1.7.2/dist/es-module-shims.min.js"></script>
+<!-- @formatter:off -->
+<script type="importmap">
+    {
+        "imports": {
+            "cm-polyglot/": "../node_modules/cm-polyglot/"
+        }
+    }
+</script>
+<!-- @formatter:on -->
+<script type="module">
+    import {teevi} from "../node_modules/teevi/src/teevi.js"
+    import "./TestStockfishRunner.js"
+    import "./TestPolyglotRunner.js"
+    import "./TestStockfishIntegration.js"
+    // the grace period test waits 5 s, the integration tests load the WASM engine
+    teevi.run({timeout: 60000})
+</script>
+</body>
+</html>
